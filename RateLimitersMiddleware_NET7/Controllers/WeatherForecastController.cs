@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace RateLimitersMiddleware_NET7.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [DisableRateLimiting]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

@@ -12,6 +12,7 @@ namespace RateLimitersMiddleware_NET7
             // Add services to the container.
             // Throttle the thread pool (set available threads to amount of processors)
             //ThreadPool.SetMaxThreads(Environment.ProcessorCount, Environment.ProcessorCount);
+            
             builder.Services.AddControllers();
             builder.Services.AddRateLimiter(options =>
             {
@@ -21,35 +22,36 @@ namespace RateLimitersMiddleware_NET7
                         factory: partition => new FixedWindowRateLimiterOptions
                         {
                             AutoReplenishment = true,
-                            PermitLimit = 10,
-                            QueueLimit = 5,
+                            PermitLimit = 1000,
+                            QueueLimit = 100,
                             QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                            Window = TimeSpan.FromSeconds(1)
+                            Window = TimeSpan.FromMinutes(1)
                         }));
 
                 options.AddFixedWindowLimiter("FixedWindow", options =>
                 {
                     options.AutoReplenishment = true;
-                    options.PermitLimit = 10;
-                    options.QueueLimit = 5;
+                    options.PermitLimit = 1000;
+                    options.QueueLimit = 100;
                     options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                    options.Window = TimeSpan.FromSeconds(1);
+                    options.Window = TimeSpan.FromMinutes(1);
                 });
                 options.AddSlidingWindowLimiter("SlidingWindow", options =>
                 {
                     options.AutoReplenishment = true;
-                    options.PermitLimit = 10;
-                    options.QueueLimit = 5;
+                    options.PermitLimit = 1000;
+                    options.QueueLimit = 100;
                     options.SegmentsPerWindow = 1;
                     options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                    options.Window = TimeSpan.FromSeconds(1);
+                    options.Window = TimeSpan.FromMinutes(1);
                 });
                 options.AddConcurrencyLimiter("Concurrency", options =>
                 {
-                    options.PermitLimit = 2;
-                    options.QueueLimit = 1;
+                    options.PermitLimit = 1000;
+                    options.QueueLimit = 100;
                     options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
                 });
+
                 options.OnRejected = async (context, token) =>
                 {
                     context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
