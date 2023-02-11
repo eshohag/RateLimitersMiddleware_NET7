@@ -1,4 +1,5 @@
 ## Rate Limiting Middleware in ASP.NET Core (.NET7)
+Rate limiting is a way to control the amount of traffic that a web application or API receives, by limiting the number of requests that can be made in a given period of time.
 
 ### Rate Limiter Algorithms
 The RateLimiterOptionsExtensions class provides the following extension methods for rate limiting:
