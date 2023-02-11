@@ -51,6 +51,15 @@ namespace RateLimitersMiddleware_NET7
                     options.QueueLimit = 100;
                     options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
                 });
+                options.AddTokenBucketLimiter("TokenBucket", options =>
+                {
+                    options.TokenLimit = 1000;
+                    options.QueueLimit = 100;
+                    options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    options.ReplenishmentPeriod = TimeSpan.FromMinutes(1);
+                    options.TokensPerPeriod =1;
+                    options.AutoReplenishment = true;
+                });
 
                 options.OnRejected = async (context, token) =>
                 {
